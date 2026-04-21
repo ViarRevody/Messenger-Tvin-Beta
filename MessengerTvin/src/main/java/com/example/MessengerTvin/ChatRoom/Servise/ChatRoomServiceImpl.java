@@ -3,16 +3,18 @@ package com.example.MessengerTvin.ChatRoom.Servise;
 import com.example.MessengerTvin.ChatRoom.Entity.ChatRoom;
 import com.example.MessengerTvin.ChatRoom.repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
     @Override
     public Optional<String> getChatRoomId(String senderId, String recipientId, boolean createNewRoomInfoExist) {
-        return chatRoomRepository.findBySenderIdAndRecipient(senderId,recipientId)
+        return chatRoomRepository.findBySenderIdAndRecipientId(senderId,recipientId)
                 .map(ChatRoom::getChatId)
                 .or(()->{
                     if(createNewRoomInfoExist){

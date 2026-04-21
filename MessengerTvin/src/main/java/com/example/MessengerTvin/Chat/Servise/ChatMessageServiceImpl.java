@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ChatMessegeServiseImpl implements ChatMessegeServise {
+public class ChatMessageServiceImpl implements ChatMessageService {
     @Autowired
     private ChatMessegeRepository chatMessegeRepository;
 
@@ -33,7 +33,7 @@ public class ChatMessegeServiseImpl implements ChatMessegeServise {
     }
 
     @Override
-    public List<ChatMessege> findSaveChatMessege(String senderId, String recipientId) {
+    public List<ChatMessege> findSaveChatMessage(String senderId, String recipientId) {
         var chatId = chatRoomService.getChatRoomId(senderId,recipientId,false);
         return chatId.map(chatMessegeRepository::findByChatId).orElse(new ArrayList<>());
     }

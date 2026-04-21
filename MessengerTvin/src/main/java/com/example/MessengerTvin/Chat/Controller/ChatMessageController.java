@@ -3,7 +3,7 @@ package com.example.MessengerTvin.Chat.Controller;
 
 import com.example.MessengerTvin.Chat.Entity.ChatMessege;
 import com.example.MessengerTvin.Chat.Entity.ChatNotification;
-import com.example.MessengerTvin.Chat.Servise.ChatMessegeServise;
+import com.example.MessengerTvin.Chat.Servise.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,14 +18,14 @@ import java.util.List;
 @Controller
 public class ChatMessageController {
     @Autowired
-    private ChatMessegeServise chatMessegeServise;
+    private ChatMessageService chatMessageService;
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessege chatMessege){
-        ChatMessege savedMessage =chatMessegeServise.saveChatMessege(chatMessege);
+        ChatMessege savedMessage =chatMessageService.saveChatMessege(chatMessege);
         simpMessagingTemplate.convertAndSendToUser(chatMessege.getRecipientId(),"/queue/messages",
                 new ChatNotification(
                         savedMessage.getId(),
@@ -38,6 +38,6 @@ public class ChatMessageController {
     @GetMapping("/messages/{senderId}/{recipientId}")
     public ResponseEntity<List<ChatMessege>> findChatMessages(@PathVariable String senderId,
                                                               @PathVariable String recipientId){
-        return ResponseEntity.ok(chatMessegeServise.findSaveChatMessege(senderId,recipientId));
+        return ResponseEntity.ok(chatMessageService.findSaveChatMessage(senderId,recipientId));
     }
 }
