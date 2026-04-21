@@ -6,17 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-public class ChatRoomServiseImpl implements ChatRoomServise{
+public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
     @Override
     public Optional<String> getChatRoomId(String senderId, String recipientId, boolean createNewRoomInfoExist) {
-        return chatRoomRepository.findBySenderIdAndRecipiend(senderId,recipientId)
+        return chatRoomRepository.findBySenderIdAndRecipient(senderId,recipientId)
                 .map(ChatRoom::getChatId)
                 .or(()->{
                     if(createNewRoomInfoExist){
                         var chatId = createChatId(senderId,recipientId);
+                        return Optional.of(chatId);
                     }
                     return Optional.empty();
                 });
@@ -26,13 +27,13 @@ public class ChatRoomServiseImpl implements ChatRoomServise{
         var chatId = String.format("%s_%s",senderId,recipientId);
         ChatRoom sendRecipient = ChatRoom.builder()
                 .chatId(chatId)
-                .recipiendId(recipientId)
+                .recipientId(recipientId)
                 .senderId(senderId)
                 .build();
         ChatRoom recipientSender =ChatRoom.builder()
                 .chatId(chatId)
                 .senderId(recipientId)
-                .recipiendId(senderId)
+                .recipientId(senderId)
                 .build();
         chatRoomRepository.save(sendRecipient);
         chatRoomRepository.save(recipientSender);

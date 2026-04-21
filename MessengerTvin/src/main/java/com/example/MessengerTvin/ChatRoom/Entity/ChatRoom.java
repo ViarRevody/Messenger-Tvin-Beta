@@ -19,5 +19,5 @@ public class ChatRoom {
 
     private String senderId;
 
-    private String recipiendId;
+    private String recipientId;
 }
