@@ -5,6 +5,8 @@ import com.example.MessengerTvin.User.entity.User;
 import com.example.MessengerTvin.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void disconnect(User user) {
-        var storedUser =userRepository.findByUserName(user.getUserName());
+        var storedUser =userRepository.findByUserName(user.getUsername());
         if(storedUser!=null && storedUser.getStatus() !=Status.ONLINE){
             storedUser.setStatus(Status.OFFLINE);
             userRepository.save(user);
@@ -42,5 +44,14 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
 
         return userRepository.findByUserName(username);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user =userRepository.findByUserName(username);
+        if(user==null){
+            throw new UsernameNotFoundException(username);
+        }
+        return user;
     }
 }

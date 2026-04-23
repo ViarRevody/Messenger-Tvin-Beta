@@ -20,7 +20,7 @@ public class UserController {
     @MessageMapping("/user.addUser")
     @SendTo("/user/public")
     public User addUser(@Payload User user){
-        User existingUser = userService.findByUsername(user.getUserName());
+        User existingUser = userService.findByUsername(user.getUsername());
         if(existingUser != null){
             userService.saveUser(user);
         }
