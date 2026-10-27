@@ -27,10 +27,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void disconnect(User user) {
-        var storedUser =userRepository.findByUserName(user.getUsername());
-        if(storedUser!=null && storedUser.getStatus() !=Status.ONLINE){
+        var storedUser = userRepository.findByUserName(user.getUsername());
+        if(storedUser != null && storedUser.getStatus() == Status.ONLINE){
             storedUser.setStatus(Status.OFFLINE);
-            userRepository.save(user);
+            userRepository.save(storedUser);
         }
     }
 

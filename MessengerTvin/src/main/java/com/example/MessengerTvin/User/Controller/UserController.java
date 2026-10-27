@@ -21,7 +21,7 @@ public class UserController {
     @SendTo("/user/public")
     public User addUser(@Payload User user){
         User existingUser = userService.findByUsername(user.getUsername());
-        if(existingUser != null){
+        if(existingUser == null){
             userService.saveUser(user);
         }
         return user;

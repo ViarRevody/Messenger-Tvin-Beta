@@ -26,9 +26,14 @@ public class AuthController {
     @GetMapping
     public String index(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user =(User) authentication.getPrincipal();
-        user.setStatus(Status.ONLINE);
-        userService.saveUser(user);
+        if (authentication != null && authentication.isAuthenticated()) {
+            String userName = authentication.getName();
+            User user = userService.findByUsername(userName);
+            if (user != null) {
+                user.setStatus(Status.ONLINE);
+                userService.saveUser(user);
+            }
+        }
         return "index";
     }
     @GetMapping("/login")
